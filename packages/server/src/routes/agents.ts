@@ -3,9 +3,9 @@ import { Hono } from "hono";
 import { db, generateId, nowIso, toAgent, toRun } from "../db/index.js";
 import { agents, runs } from "../db/schema.js";
 import { logActivity } from "../services/activity.js";
-import { executeAdapter } from "../adapters/claude-code.js";
-import { executeCodex } from "../adapters/codex.js";
-import { executeShell } from "../adapters/shell.js";
+import { claudeCodeAdapter } from "../adapters/claude-code.js";
+import { codexAdapter } from "../adapters/codex.js";
+import { shellAdapter } from "../adapters/shell.js";
 import type { ExecutionContext, ExecutionResult } from "../adapters/types.js";
 
 export const agentsRoutes = new Hono();
@@ -187,13 +187,13 @@ agentsRoutes.post("/agents/:id/invoke", async (c) => {
   try {
     switch (agent.adapterType) {
       case "claude_code":
-        result = await executeAdapter(context);
+        result = await claudeCodeAdapter.execute(context);
         break;
       case "codex":
-        result = await executeCodex(context);
+        result = await codexAdapter.execute(context);
         break;
       case "shell":
-        result = await executeShell(context);
+        result = await shellAdapter.execute(context);
         break;
       default:
         result = { status: "error", stdout: "", stderr: `Unknown adapter: ${agent.adapterType}`, durationMs: 0 };

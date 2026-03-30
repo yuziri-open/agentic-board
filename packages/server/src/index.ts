@@ -90,7 +90,12 @@ export function startServer(port = Number(process.env.PORT ?? "4000")) {
   });
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Auto-start when run directly (works on Windows + Unix)
+const isMain =
+  import.meta.url === `file://${process.argv[1]}` ||
+  import.meta.url === `file:///${process.argv[1]?.replace(/\\/g, "/")}`;
+
+if (isMain || process.argv[1]?.endsWith("index.ts")) {
   const port = Number(process.env.PORT ?? "4000");
   startServer(port);
   console.log(`AgenticBoard server listening on http://localhost:${port}`);
