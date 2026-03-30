@@ -2,23 +2,8 @@ import Database from "better-sqlite3";
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { nanoid } from "nanoid";
-import type {
-  Activity,
-  Agent,
-  Company,
-  Project,
-  Run,
-  Task
-} from "@agentic-board/shared";
-import {
-  activities,
-  agents,
-  companies,
-  projects,
-  runs,
-  schemaSql,
-  tasks
-} from "./schema.js";
+import type { Activity, Agent, Company, Project, Run, Task } from "@agentic-board/shared";
+import { activities, agents, companies, projects, runs, schemaSql, settings, tasks } from "./schema.js";
 
 const databasePath = process.env.AGENTIC_BOARD_DB_PATH ?? "agentic-board.sqlite";
 
@@ -54,6 +39,24 @@ export function minutesAgo(minutes: number): string {
 
 export function generateId(): string {
   return nanoid(12);
+}
+
+export function getSetting<T>(key: string): T | null {
+  const row = db.select().from(settings).where(eq(settings.key, key)).get();
+  return row ? parseJson<T>(row.value) : null;
+}
+
+export function setSetting(key: string, value: unknown): void {
+  const serialized = JSON.stringify(value);
+  const updatedAt = nowIso();
+  const existing = db.select().from(settings).where(eq(settings.key, key)).get();
+
+  if (existing) {
+    db.update(settings).set({ value: serialized, updatedAt }).where(eq(settings.key, key)).run();
+    return;
+  }
+
+  db.insert(settings).values({ key, value: serialized, updatedAt }).run();
 }
 
 export function toCompany(row: typeof companies.$inferSelect): Company {
@@ -160,7 +163,11 @@ function seedDatabase(): void {
   const ceoId = generateId();
   const managerId = generateId();
   const workerId = generateId();
-  const [taskA, taskB, taskC, taskD, taskE] = Array.from({ length: 5 }, () => generateId());
+  const taskA = generateId();
+  const taskB = generateId();
+  const taskC = generateId();
+  const taskD = generateId();
+  const taskE = generateId();
 
   db.insert(companies)
     .values({
@@ -334,70 +341,76 @@ function seedDatabase(): void {
     .run();
 
   db.insert(runs)
-    .values([
-      {
-        id: generateId(),
-        agentId: workerId,
-        taskId: taskE,
-        status: "success",
-        adapterType: "shell",
-        stdout: "Dashboard MVP built.",
-        stderr: "",
-        costCents: 1260,
-        tokensUsed: 18500,
-        startedAt: minutesAgo(180),
-        completedAt: minutesAgo(20),
-        durationMs: 210000
-      },
-      {
-        id: generateId(),
-        agentId: managerId,
-        taskId: taskD,
-        status: "running",
-        adapterType: "codex",
-        stdout: "Reviewing workspace changes...",
-        stderr: "",
-        costCents: 2970,
-        tokensUsed: 40200,
-        startedAt: minutesAgo(15),
-        durationMs: 900000
-      }
-    ])
+    .values({
+      id: generateId(),
+      agentId: workerId,
+      taskId: taskE,
+      status: "success",
+      adapterType: "shell",
+      stdout: "Dashboard MVP built.",
+      stderr: "",
+      costCents: 1260,
+      tokensUsed: 18500,
+      startedAt: minutesAgo(180),
+      completedAt: minutesAgo(20),
+      durationMs: 210000
+    })
+    .run();
+
+  db.insert(runs)
+    .values({
+      id: generateId(),
+      agentId: managerId,
+      taskId: taskD,
+      status: "running",
+      adapterType: "codex",
+      stdout: "Reviewing workspace changes...",
+      stderr: "",
+      costCents: 2970,
+      tokensUsed: 40200,
+      startedAt: minutesAgo(15),
+      completedAt: null,
+      durationMs: 900000
+    })
     .run();
 
   db.insert(activities)
-    .values([
-      {
-        id: generateId(),
-        companyId,
-        agentId: workerId,
-        action: "task.completed",
-        targetType: "task",
-        targetId: taskE,
-        details: JSON.stringify({ identifier: "PLT-48", title: "Ship dashboard skeleton" }),
-        createdAt: minutesAgo(20)
-      },
-      {
-        id: generateId(),
-        companyId,
-        agentId: managerId,
-        action: "task.review_started",
-        targetType: "task",
-        targetId: taskD,
-        details: JSON.stringify({ identifier: "SEO-47", title: "Approve revised slug structure" }),
-        createdAt: minutesAgo(12)
-      },
-      {
-        id: generateId(),
-        companyId,
-        agentId: ceoId,
-        action: "task.assigned",
-        targetType: "task",
-        targetId: taskB,
-        details: JSON.stringify({ identifier: "SEO-44", assignee: "Pen" }),
-        createdAt: minutesAgo(30)
-      }
-    ])
+    .values({
+      id: generateId(),
+      companyId,
+      agentId: workerId,
+      action: "task.completed",
+      targetType: "task",
+      targetId: taskE,
+      details: JSON.stringify({ identifier: "PLT-48", title: "Ship dashboard skeleton" }),
+      createdAt: minutesAgo(20)
+    })
+    .run();
+
+  db.insert(activities)
+    .values({
+      id: generateId(),
+      companyId,
+      agentId: managerId,
+      action: "task.review_started",
+      targetType: "task",
+      targetId: taskD,
+      details: JSON.stringify({ identifier: "SEO-47", title: "Approve revised slug structure" }),
+      createdAt: minutesAgo(12)
+    })
+    .run();
+
+  db.insert(activities)
+    .values({
+      id: generateId(),
+      companyId,
+      agentId: ceoId,
+      action: "task.assigned",
+      targetType: "task",
+      targetId: taskB,
+      details: JSON.stringify({ identifier: "SEO-44", assignee: "Pen" }),
+      createdAt: minutesAgo(30)
+    })
     .run();
 }
 

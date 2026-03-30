@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { type AnySQLiteColumn, index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const companies = sqliteTable(
   "companies",
@@ -47,7 +47,7 @@ export const agents = sqliteTable(
     capabilities: text("capabilities"),
     adapterType: text("adapter_type").notNull(),
     adapterConfig: text("adapter_config"),
-    reportsTo: text("reports_to").references(() => agents.id),
+    reportsTo: text("reports_to").references((): AnySQLiteColumn => agents.id),
     status: text("status").notNull().default("idle"),
     budgetMonthlyCents: integer("budget_monthly_cents").notNull().default(0),
     spentMonthlyCents: integer("spent_monthly_cents").notNull().default(0),
@@ -69,7 +69,7 @@ export const tasks = sqliteTable(
       .notNull()
       .references(() => companies.id),
     projectId: text("project_id").references(() => projects.id),
-    parentId: text("parent_id").references(() => tasks.id),
+    parentId: text("parent_id").references((): AnySQLiteColumn => tasks.id),
     title: text("title").notNull(),
     description: text("description"),
     status: text("status").notNull().default("backlog"),
@@ -131,6 +131,12 @@ export const activities = sqliteTable(
     createdIdx: index("activities_created_at_idx").on(table.createdAt)
   })
 );
+
+export const settings = sqliteTable("settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`)
+});
 
 export const schemaSql = [
   `CREATE TABLE IF NOT EXISTS companies (
@@ -207,6 +213,11 @@ export const schemaSql = [
     target_id TEXT,
     details TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );`,
+  `CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   );`,
   `CREATE INDEX IF NOT EXISTS agents_company_idx ON agents(company_id);`,
   `CREATE INDEX IF NOT EXISTS projects_company_idx ON projects(company_id);`,

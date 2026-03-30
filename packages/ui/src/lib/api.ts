@@ -5,6 +5,9 @@ import type {
   AdapterType,
   Company,
   DashboardResponse,
+  GasSettings,
+  GasSyncResult,
+  GasTestResult,
   Project,
   Task,
   TaskStatus
@@ -60,8 +63,8 @@ async function request<T>(path: string, init: RequestOptions = {}): Promise<T> {
 
   if (!response.ok) {
     const fallback = `${response.status} ${response.statusText}`.trim();
-    const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-    throw new ApiError(payload?.error ?? fallback, response.status);
+    const payload = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+    throw new ApiError(payload?.error ?? payload?.message ?? fallback, response.status);
   }
 
   if (response.status === 204) {
@@ -70,6 +73,15 @@ async function request<T>(path: string, init: RequestOptions = {}): Promise<T> {
 
   return (await response.json()) as T;
 }
+
+export const statusLabels: Record<string, string> = {
+  backlog: "バックログ",
+  todo: "着手可能",
+  in_progress: "進行中",
+  in_review: "レビュー待ち",
+  done: "完了",
+  cancelled: "キャンセル"
+};
 
 export const api = {
   listCompanies: () => request<Company[]>("/companies"),
@@ -107,6 +119,20 @@ export const api = {
     request<Task>(`/tasks/${taskId}`, {
       method: "PATCH",
       body: payload
+    }),
+  getSettings: () => request<{ gas: GasSettings }>("/settings"),
+  updateSettings: (payload: { gas: Omit<GasSettings, "lastSyncAt"> | GasSettings }) =>
+    request<{ gas: GasSettings }>("/settings", {
+      method: "PUT",
+      body: payload
+    }),
+  testGasConnection: () =>
+    request<GasTestResult>("/settings/gas/test", {
+      method: "POST"
+    }),
+  syncGas: () =>
+    request<GasSyncResult>("/settings/gas/sync", {
+      method: "POST"
     })
 };
 

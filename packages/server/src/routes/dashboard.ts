@@ -1,20 +1,22 @@
 import type { DashboardResponse, TaskStatus } from "@agentic-board/shared";
 import { Hono } from "hono";
 import { getCompanyById, listCompanyChildren } from "../db/index.js";
+import { getDashboardCalendar } from "./settings.js";
 
 const taskStatuses: TaskStatus[] = ["backlog", "todo", "in_progress", "in_review", "done", "cancelled"];
 
 export const dashboardRoutes = new Hono();
 
-dashboardRoutes.get("/companies/:companyId/dashboard", (c) => {
+dashboardRoutes.get("/companies/:companyId/dashboard", async (c) => {
   const company = getCompanyById(c.req.param("companyId"));
   if (!company) {
     return c.json({ error: "company not found" }, 404);
   }
 
   const { agents, projects, recentActivity, tasks } = listCompanyChildren(company.id);
+  const { settings: gasSettings, calendarEvents } = await getDashboardCalendar();
   const today = new Date().toDateString();
-  const grouped = Object.fromEntries(taskStatuses.map((status) => [status, []])) as Record<TaskStatus, typeof tasks>;
+  const grouped = Object.fromEntries(taskStatuses.map((status) => [status, [] as typeof tasks])) as unknown as Record<TaskStatus, typeof tasks>;
 
   for (const task of tasks) {
     grouped[task.status].push(task);
@@ -42,7 +44,9 @@ dashboardRoutes.get("/companies/:companyId/dashboard", (c) => {
     tasksByStatus: grouped,
     agents,
     projects,
-    recentActivity
+    recentActivity,
+    gasSettings,
+    calendarEvents
   };
 
   return c.json(payload);

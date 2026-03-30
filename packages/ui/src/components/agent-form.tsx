@@ -36,44 +36,44 @@ const optionStyle = {
 
 const roleOptions: Array<{ value: AgentRole; label: string }> = [
   { value: "ceo", label: "CEO" },
-  { value: "manager", label: "Manager" },
-  { value: "worker", label: "Worker" }
+  { value: "manager", label: "マネージャー" },
+  { value: "worker", label: "ワーカー" }
 ];
 
 const adapterOptions: Array<{ value: SupportedAdapterType; label: string; description: string }> = [
   {
     value: "claude_code",
     label: "Claude Code",
-    description: "Best when you want strong code-generation and repo-aware CLI workflows."
+    description: "AnthropicのCLIエージェント。コード生成・編集に最適"
   },
   {
     value: "codex",
     label: "Codex",
-    description: "Best for OpenAI CLI-driven coding and terminal-first execution."
+    description: "OpenAIのCLIエージェント。自律的なコード実装が可能"
   },
   {
     value: "shell",
     label: "Shell",
-    description: "Best for custom commands, local scripts, and host-native automation."
+    description: "任意のシェルコマンドを実行するアダプター"
   }
 ];
 
 const permissionOptions: Array<{ value: ClaudePermissionMode; label: string }> = [
-  { value: "default", label: "Default" },
-  { value: "acceptEdits", label: "Accept edits" },
-  { value: "bypassPermissions", label: "Bypass permissions" }
+  { value: "default", label: "標準" },
+  { value: "acceptEdits", label: "編集を許可" },
+  { value: "bypassPermissions", label: "全権限バイパス" }
 ];
 
 const codexApprovalOptions: Array<{ value: CodexApprovalMode; label: string }> = [
-  { value: "full-auto", label: "Full auto" },
-  { value: "suggest", label: "Suggest" },
-  { value: "ask", label: "Ask" }
+  { value: "full-auto", label: "フルオート" },
+  { value: "suggest", label: "提案モード" },
+  { value: "ask", label: "確認モード" }
 ];
 
 const shellOptions: Array<{ value: ShellMode; label: string }> = [
   { value: "powershell", label: "PowerShell" },
   { value: "bash", label: "Bash" },
-  { value: "true", label: "System default" }
+  { value: "true", label: "システム標準" }
 ];
 
 export function createDefaultAgentDraft(): AgentDraft {
@@ -106,17 +106,13 @@ export function getAdapterSummary(draft: AgentDraft): string {
     case "codex":
       return `${draft.codexModel} / ${humanize(draft.codexApprovalMode)}`;
     case "shell":
-      return `${draft.shellMode === "true" ? "system default shell" : draft.shellMode} / ${draft.shellCommand}`;
+      return `${draft.shellMode === "true" ? "システム標準" : draft.shellMode} / ${draft.shellCommand}`;
     default:
       return "";
   }
 }
 
-export function AgentEditorFields({
-  draft,
-  onChange,
-  idPrefix = "agent"
-}: AgentEditorFieldsProps) {
+export function AgentEditorFields({ draft, onChange, idPrefix = "agent" }: AgentEditorFieldsProps) {
   const update = <K extends keyof AgentDraft>(key: K, value: AgentDraft[K]) => {
     onChange({ ...draft, [key]: value });
   };
@@ -130,7 +126,7 @@ export function AgentEditorFields({
       <div className="grid gap-4 md:grid-cols-2">
         <label className={labelClassName}>
           <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-            Agent name
+            エージェント名
           </span>
           <input
             id={`${idPrefix}-name`}
@@ -138,13 +134,13 @@ export function AgentEditorFields({
             style={controlStyle}
             value={draft.name}
             onChange={handleTextInput("name")}
-            placeholder="Navigator"
+            placeholder="エージェント名"
           />
         </label>
 
         <label className={labelClassName}>
           <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-            Role
+            ロール
           </span>
           <select
             id={`${idPrefix}-role`}
@@ -164,7 +160,7 @@ export function AgentEditorFields({
 
       <label className={labelClassName}>
         <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-          Adapter
+          アダプター
         </span>
         <select
           id={`${idPrefix}-adapter`}
@@ -184,52 +180,26 @@ export function AgentEditorFields({
         </span>
       </label>
 
-      <div
-        className="rounded-[28px] border p-5"
-        style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}
-      >
+      <div className="rounded-[28px] border p-5" style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}>
         <div className="mb-4">
           <p className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-            Adapter configuration
+            アダプター設定
           </p>
           <p className={`mt-2 ${helpTextClassName}`} style={{ color: "var(--text-secondary)" }}>
-            Configure the command-line adapter exactly as this agent should run in production.
+            選択したアダプターの詳細設定を行います
           </p>
         </div>
 
         {draft.adapterType === "claude_code" ? (
           <div className="grid gap-4 md:grid-cols-2">
             <label className={labelClassName}>
-              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-                Model
-              </span>
-              <input
-                id={`${idPrefix}-claude-model`}
-                className={controlClassName}
-                style={controlStyle}
-                value={draft.claudeModel}
-                onChange={handleTextInput("claudeModel")}
-              />
+              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>モデル</span>
+              <input id={`${idPrefix}-claude-model`} className={controlClassName} style={controlStyle} value={draft.claudeModel} onChange={handleTextInput("claudeModel")} />
             </label>
-
             <label className={labelClassName}>
-              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-                Permission mode
-              </span>
-              <select
-                id={`${idPrefix}-claude-permission`}
-                className={controlClassName}
-                style={controlStyle}
-                value={draft.claudePermissionMode}
-                onChange={(event) =>
-                  update("claudePermissionMode", event.target.value as ClaudePermissionMode)
-                }
-              >
-                {permissionOptions.map((option) => (
-                  <option key={option.value} value={option.value} style={optionStyle}>
-                    {option.label}
-                  </option>
-                ))}
+              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>権限モード</span>
+              <select id={`${idPrefix}-claude-permission`} className={controlClassName} style={controlStyle} value={draft.claudePermissionMode} onChange={(event) => update("claudePermissionMode", event.target.value as ClaudePermissionMode)}>
+                {permissionOptions.map((option) => <option key={option.value} value={option.value} style={optionStyle}>{option.label}</option>)}
               </select>
             </label>
           </div>
@@ -238,36 +208,13 @@ export function AgentEditorFields({
         {draft.adapterType === "codex" ? (
           <div className="grid gap-4 md:grid-cols-2">
             <label className={labelClassName}>
-              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-                Model
-              </span>
-              <input
-                id={`${idPrefix}-codex-model`}
-                className={controlClassName}
-                style={controlStyle}
-                value={draft.codexModel}
-                onChange={handleTextInput("codexModel")}
-              />
+              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>モデル</span>
+              <input id={`${idPrefix}-codex-model`} className={controlClassName} style={controlStyle} value={draft.codexModel} onChange={handleTextInput("codexModel")} />
             </label>
-
             <label className={labelClassName}>
-              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-                Approval mode
-              </span>
-              <select
-                id={`${idPrefix}-codex-approval`}
-                className={controlClassName}
-                style={controlStyle}
-                value={draft.codexApprovalMode}
-                onChange={(event) =>
-                  update("codexApprovalMode", event.target.value as CodexApprovalMode)
-                }
-              >
-                {codexApprovalOptions.map((option) => (
-                  <option key={option.value} value={option.value} style={optionStyle}>
-                    {option.label}
-                  </option>
-                ))}
+              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>承認モード</span>
+              <select id={`${idPrefix}-codex-approval`} className={controlClassName} style={controlStyle} value={draft.codexApprovalMode} onChange={(event) => update("codexApprovalMode", event.target.value as CodexApprovalMode)}>
+                {codexApprovalOptions.map((option) => <option key={option.value} value={option.value} style={optionStyle}>{option.label}</option>)}
               </select>
             </label>
           </div>
@@ -276,34 +223,13 @@ export function AgentEditorFields({
         {draft.adapterType === "shell" ? (
           <div className="grid gap-4 md:grid-cols-[minmax(0,1.4fr)_minmax(220px,0.8fr)]">
             <label className={labelClassName}>
-              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-                Command
-              </span>
-              <input
-                id={`${idPrefix}-shell-command`}
-                className={controlClassName}
-                style={controlStyle}
-                value={draft.shellCommand}
-                onChange={handleTextInput("shellCommand")}
-              />
+              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>コマンド</span>
+              <input id={`${idPrefix}-shell-command`} className={controlClassName} style={controlStyle} value={draft.shellCommand} onChange={handleTextInput("shellCommand")} placeholder="echo テスト" />
             </label>
-
             <label className={labelClassName}>
-              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>
-                Shell
-              </span>
-              <select
-                id={`${idPrefix}-shell-mode`}
-                className={controlClassName}
-                style={controlStyle}
-                value={draft.shellMode}
-                onChange={(event) => update("shellMode", event.target.value as ShellMode)}
-              >
-                {shellOptions.map((option) => (
-                  <option key={option.value} value={option.value} style={optionStyle}>
-                    {option.label}
-                  </option>
-                ))}
+              <span className={labelTextClassName} style={{ color: "var(--text-tertiary)" }}>シェル</span>
+              <select id={`${idPrefix}-shell-mode`} className={controlClassName} style={controlStyle} value={draft.shellMode} onChange={(event) => update("shellMode", event.target.value as ShellMode)}>
+                {shellOptions.map((option) => <option key={option.value} value={option.value} style={optionStyle}>{option.label}</option>)}
               </select>
             </label>
           </div>
@@ -316,20 +242,11 @@ export function AgentEditorFields({
 function getAdapterConfig(draft: AgentDraft): Record<string, unknown> {
   switch (draft.adapterType) {
     case "claude_code":
-      return {
-        model: draft.claudeModel.trim(),
-        permissionMode: draft.claudePermissionMode
-      };
+      return { model: draft.claudeModel.trim(), permissionMode: draft.claudePermissionMode };
     case "codex":
-      return {
-        model: draft.codexModel.trim(),
-        approval: draft.codexApprovalMode
-      };
+      return { model: draft.codexModel.trim(), approval: draft.codexApprovalMode };
     case "shell":
-      return {
-        command: draft.shellCommand.trim(),
-        shell: draft.shellMode === "true" ? true : draft.shellMode
-      };
+      return { command: draft.shellCommand.trim(), shell: draft.shellMode === "true" ? true : draft.shellMode };
   }
 }
 

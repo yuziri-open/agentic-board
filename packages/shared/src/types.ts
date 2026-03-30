@@ -103,6 +103,52 @@ export interface DashboardSummary {
   monthlyCostCents: number;
 }
 
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string | null;
+  description: string | null;
+  location: string | null;
+}
+
+export interface GasFile {
+  id: string;
+  name: string;
+  mimeType: string | null;
+  url: string | null;
+  updatedAt: string | null;
+}
+
+export interface GasTask {
+  id: string;
+  title: string;
+  status: string | null;
+  dueDate: string | null;
+}
+
+export interface GasSettings {
+  endpoint: string;
+  enabled: boolean;
+  calendarSync: boolean;
+  taskSync: boolean;
+  syncIntervalMinutes: number;
+  lastSyncAt: string | null;
+}
+
+export interface GasTestResult {
+  ok: boolean;
+  message: string;
+}
+
+export interface GasSyncResult {
+  ok: boolean;
+  message: string;
+  syncedAt: string;
+  calendarEvents: CalendarEvent[];
+  tasks: GasTask[];
+}
+
 export interface DashboardResponse {
   company: Company;
   summary: DashboardSummary;
@@ -110,4 +156,6 @@ export interface DashboardResponse {
   agents: Agent[];
   projects: Project[];
   recentActivity: Activity[];
+  gasSettings: GasSettings;
+  calendarEvents: CalendarEvent[];
 }

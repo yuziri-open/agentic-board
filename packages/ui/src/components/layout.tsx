@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Menu,
   Moon,
+  SlidersHorizontal,
   Sparkles,
   Sun,
   X
@@ -16,11 +17,12 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Button, cn } from "./ui/button";
 
 const navigation = [
-  { label: "Dashboard", to: "/", icon: LayoutDashboard },
-  { label: "Agents", to: "/agents", icon: Bot },
-  { label: "Tasks", to: "/tasks", icon: FolderKanban },
-  { label: "Projects", to: "/projects", icon: BriefcaseBusiness },
-  { label: "Activity", to: "/activity", icon: Activity }
+  { label: "ダッシュボード", to: "/", icon: LayoutDashboard },
+  { label: "エージェント", to: "/agents", icon: Bot },
+  { label: "タスク", to: "/tasks", icon: FolderKanban },
+  { label: "プロジェクト", to: "/projects", icon: BriefcaseBusiness },
+  { label: "アクティビティ", to: "/activity", icon: Activity },
+  { label: "設定", to: "/settings", icon: SlidersHorizontal }
 ] as const;
 
 type LayoutProps = {
@@ -53,7 +55,7 @@ export function ThemeToggle() {
     <button
       onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
       className="theme-toggle"
-      aria-label="Toggle theme"
+      aria-label="テーマ切替"
     >
       {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
     </button>
@@ -72,7 +74,7 @@ export function Layout({
   const location = useLocation();
 
   const currentSection = useMemo(
-    () => navigation.find((item) => item.to === location.pathname)?.label ?? "Dashboard",
+    () => navigation.find((item) => item.to === location.pathname)?.label ?? "ダッシュボード",
     [location.pathname]
   );
 
@@ -102,7 +104,7 @@ export function Layout({
                   AgenticBoard
                 </p>
                 <p className="mt-1 text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
-                  Mission control
+                  ミッションコントロール
                 </p>
               </div>
             </div>
@@ -149,17 +151,17 @@ export function Layout({
             style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}
           >
             <p className="text-xs uppercase tracking-[0.28em]" style={{ color: "var(--text-tertiary)" }}>
-              About
+              このツールについて
             </p>
             <p className="mt-3 text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-              Open-source AI agent orchestration platform. Manage autonomous agents, tasks, and projects.
+              オープンソースのAIエージェント管理プラットフォーム。エージェント、タスク、プロジェクトを一元管理。
             </p>
           </div>
         </div>
 
         {isMobileNavOpen ? (
           <button
-            aria-label="Close navigation"
+            aria-label="ナビゲーションを閉じる"
             className="fixed inset-0 z-30 backdrop-blur-sm lg:hidden"
             style={{ background: "var(--card-strong-bg)" }}
             onClick={() => setIsMobileNavOpen(false)}
@@ -182,13 +184,13 @@ export function Layout({
                 <div>
                   <p className="text-xs uppercase tracking-[0.32em]" style={{ color: "var(--icon-text)" }}>
                     {currentSection}
+                    {isRefreshing ? " · 更新中" : ""}
                   </p>
                   <h1 className="mt-2 text-2xl font-semibold sm:text-3xl" style={{ color: "var(--text-primary)" }}>
-                    {selectedCompany?.name ?? "Select a company"}
+                    {selectedCompany?.name ?? "ワークスペースを選択"}
                   </h1>
                   <p className="subtle-text mt-2 max-w-2xl text-sm">
-                    {selectedCompany?.description ??
-                      "Monitor autonomous work, task flow, and project health across selected workspace."}
+                    {selectedCompany?.description ?? "エージェントの自律作業、タスクフロー、プロジェクトの健全性を監視"}
                   </p>
                 </div>
               </div>
@@ -196,7 +198,7 @@ export function Layout({
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <label className="flex min-w-[220px] flex-col gap-2">
                   <span className="text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>
-                    Company context
+                    ワークスペース
                   </span>
                   <select
                     className="rounded-2xl border px-4 py-3 text-sm outline-none transition focus:border-indigo-400/40"
@@ -211,7 +213,7 @@ export function Layout({
                   >
                     {companies.length ? null : (
                       <option value="" style={optionStyle}>
-                        No companies available
+                        ワークスペースがありません
                       </option>
                     )}
                     {companies.map((company) => (

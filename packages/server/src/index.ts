@@ -12,6 +12,7 @@ import { companiesRoutes } from "./routes/companies.js";
 import { dashboardRoutes } from "./routes/dashboard.js";
 import { projectsRoutes } from "./routes/projects.js";
 import { runsRoutes } from "./routes/runs.js";
+import { settingsRoutes } from "./routes/settings.js";
 import { tasksRoutes } from "./routes/tasks.js";
 
 const mimeTypes: Record<string, string> = {
@@ -62,6 +63,7 @@ export function createApp(): Hono {
   app.route("/api", runsRoutes);
   app.route("/api", activityRoutes);
   app.route("/api", dashboardRoutes);
+  app.route("/api", settingsRoutes);
 
   app.get("*", async (c) => {
     const uiDist = getUiDistPath();
@@ -92,7 +94,6 @@ export function startServer(port = Number(process.env.PORT ?? "4000")) {
   });
 }
 
-// Auto-start when run directly (works on Windows + Unix)
 const isMain =
   import.meta.url === `file://${process.argv[1]}` ||
   import.meta.url === `file:///${process.argv[1]?.replace(/\\/g, "/")}`;

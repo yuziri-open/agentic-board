@@ -8,6 +8,7 @@ import { ActivityPage } from "./pages/activity";
 import { AgentsPage } from "./pages/agents";
 import { DashboardPage } from "./pages/dashboard";
 import { ProjectsPage } from "./pages/projects";
+import { SettingsPage } from "./pages/settings";
 import { SetupPage } from "./pages/setup";
 import { TasksPage } from "./pages/tasks";
 
@@ -33,13 +34,13 @@ export function App() {
   }, [companiesQuery.data, selectedCompanyId]);
 
   if (companiesQuery.isLoading) {
-    return <FullscreenMessage label="Loading companies..." />;
+    return <FullscreenMessage label="?????????????..." />;
   }
 
   if (companiesQuery.isError) {
     return (
       <FullscreenMessage
-        label={companiesQuery.error instanceof Error ? companiesQuery.error.message : "Failed to load companies."}
+        label={companiesQuery.error instanceof Error ? companiesQuery.error.message : "????????????????????"}
       />
     );
   }
@@ -65,6 +66,7 @@ export function App() {
         <Route path="/tasks" element={<TasksPage companyId={selectedCompanyId} />} />
         <Route path="/projects" element={<ProjectsPage companyId={selectedCompanyId} />} />
         <Route path="/activity" element={<ActivityPage companyId={selectedCompanyId} />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
@@ -79,7 +81,7 @@ function FullscreenMessage({ label }: { label: string }) {
           AgenticBoard
         </p>
         <h1 className="mt-4 text-2xl font-semibold" style={{ color: "var(--text-primary)" }}>
-          Workspace initialization
+          ??????????
         </h1>
         <p className="subtle-text mt-3 text-sm">{label}</p>
       </div>

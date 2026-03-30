@@ -1,0 +1,32 @@
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { GasSettings } from "@agentic-board/shared";
+import { CheckCircle2, RefreshCcw, Wifi } from "lucide-react";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { api } from "../lib/api";
+
+const defaultSettings: GasSettings = { endpoint: "", enabled: false, calendarSync: true, taskSync: false, syncIntervalMinutes: 30, lastSyncAt: null };
+
+export function SettingsPage() {
+  const queryClient = useQueryClient();
+  const settingsQuery = useQuery({ queryKey: ["settings"], queryFn: api.getSettings });
+  const [draft, setDraft] = useState<GasSettings>(defaultSettings);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => { if (settingsQuery.data?.gas) setDraft(settingsQuery.data.gas); }, [settingsQuery.data]);
+
+  const saveMutation = useMutation({ mutationFn: () => api.updateSettings({ gas: draft }), onSuccess: async (result) => { setDraft(result.gas); setNotice("設定を保存しました。"); await queryClient.invalidateQueries({ queryKey: ["settings"] }); await queryClient.invalidateQueries({ queryKey: ["dashboard"] }); } });
+  const testMutation = useMutation({ mutationFn: () => api.testGasConnection(), onSuccess: (result) => setNotice(result.message), onError: (error) => setNotice(error instanceof Error ? error.message : "接続テストに失敗しました。") });
+  const syncMutation = useMutation({ mutationFn: () => api.syncGas(), onSuccess: async (result) => { setNotice(result.message); setDraft((current) => ({ ...current, lastSyncAt: result.syncedAt })); await queryClient.invalidateQueries({ queryKey: ["dashboard"] }); await queryClient.invalidateQueries({ queryKey: ["settings"] }); }, onError: (error) => setNotice(error instanceof Error ? error.message : "同期に失敗しました。") });
+
+  if (settingsQuery.isLoading) return <PageState message="設定を読み込み中..." />;
+  if (settingsQuery.isError) return <PageState message={settingsQuery.error instanceof Error ? settingsQuery.error.message : "設定の読み込みに失敗しました。"} />;
+
+  return <div className="space-y-5"><Card><CardHeader><CardTitle>設定</CardTitle><CardDescription>GAS連携の設定、接続確認、手動同期を行います。</CardDescription></CardHeader></Card><Card><CardHeader className="flex flex-row items-center justify-between gap-4"><div><CardTitle>GAS連携</CardTitle><CardDescription>Google Apps ScriptのエンドポイントURLと同期設定</CardDescription></div><Badge status={draft.enabled ? "running" : "paused"}>{draft.enabled ? "有効" : "無効"}</Badge></CardHeader><CardContent className="space-y-5"><label className="flex flex-col gap-2"><span className="text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>GASエンドポイントURL</span><input className="rounded-2xl border px-4 py-3 text-sm outline-none" style={controlStyle} value={draft.endpoint} onChange={(event) => setDraft((current) => ({ ...current, endpoint: event.target.value }))} placeholder="https://script.google.com/macros/s/.../exec" /></label><div className="grid gap-4 md:grid-cols-2"><ToggleRow label="GAS連携を有効化" checked={draft.enabled} onChange={(checked) => setDraft((current) => ({ ...current, enabled: checked }))} /><ToggleRow label="カレンダー同期" checked={draft.calendarSync} onChange={(checked) => setDraft((current) => ({ ...current, calendarSync: checked }))} /><ToggleRow label="タスク同期" checked={draft.taskSync} onChange={(checked) => setDraft((current) => ({ ...current, taskSync: checked }))} /><label className="flex flex-col gap-2"><span className="text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>同期間隔（分）</span><input type="number" min={1} className="rounded-2xl border px-4 py-3 text-sm outline-none" style={controlStyle} value={draft.syncIntervalMinutes} onChange={(event) => setDraft((current) => ({ ...current, syncIntervalMinutes: Math.max(1, Number(event.target.value) || 1) }))} /></label></div><div className="flex flex-wrap gap-3"><Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>{saveMutation.isPending ? "保存中..." : "設定を保存"}</Button><Button variant="outline" onClick={() => testMutation.mutate()} disabled={testMutation.isPending}><Wifi className="h-4 w-4" />{testMutation.isPending ? "接続確認中..." : "接続テスト"}</Button><Button variant="outline" onClick={() => syncMutation.mutate()} disabled={syncMutation.isPending}><RefreshCcw className="h-4 w-4" />{syncMutation.isPending ? "同期中..." : "手動同期"}</Button></div><div className="rounded-2xl border p-4 text-sm" style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)", color: "var(--text-secondary)" }}><div className="flex items-center gap-2" style={{ color: "var(--text-primary)" }}><CheckCircle2 className="h-4 w-4" />最終同期: {draft.lastSyncAt ? formatDate(draft.lastSyncAt) : "未同期"}</div>{notice ? <p className="mt-2">{notice}</p> : <p className="mt-2">保存後にダッシュボードへ反映されます。</p>}</div></CardContent></Card></div>;
+}
+function ToggleRow({ label, checked, onChange }: { label: string; checked: boolean; onChange: (checked: boolean) => void }) { return <label className="flex items-center justify-between rounded-2xl border px-4 py-3" style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}><span style={{ color: "var(--text-primary)" }}>{label}</span><input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} /></label>; }
+function PageState({ message }: { message: string }) { return <Card><CardContent className="flex min-h-[240px] items-center justify-center"><p className="text-sm" style={{ color: "var(--text-secondary)" }}>{message}</p></CardContent></Card>; }
+function formatDate(value: string) { return new Intl.DateTimeFormat("ja-JP", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); }
+const controlStyle = { borderColor: "var(--border-weak)", background: "var(--card-strong-bg)", color: "var(--text-primary)" } as const;

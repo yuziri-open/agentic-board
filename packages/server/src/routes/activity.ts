@@ -11,7 +11,7 @@ activityRoutes.get("/companies/:companyId/activity", (c) => {
 activityRoutes.get("/activity/stream", (c) => {
   const companyId = c.req.query("companyId") ?? undefined;
   const encoder = new TextEncoder();
-  let unsubscribe = () => undefined;
+  let unsubscribe: () => void = () => {};
   let heartbeat: NodeJS.Timeout | undefined;
 
   const stream = new ReadableStream<Uint8Array>({
@@ -21,7 +21,7 @@ activityRoutes.get("/activity/stream", (c) => {
       };
 
       unsubscribe = subscribeToActivity({
-        companyId,
+        ...(companyId ? { companyId } : {}),
         onActivity: (activity) => send("activity", activity)
       });
 
