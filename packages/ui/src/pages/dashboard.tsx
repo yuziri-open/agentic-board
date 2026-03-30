@@ -68,7 +68,14 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
           const Icon = item.icon;
           return (
             <Card key={item.eyebrow} className="relative overflow-hidden">
-              <div className="absolute right-4 top-4 rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-3 text-indigo-200">
+              <div
+                className="absolute right-4 top-4 rounded-2xl border p-3"
+                style={{
+                  borderColor: "var(--border-weak)",
+                  background: "var(--icon-bg)",
+                  color: "var(--icon-text)"
+                }}
+              >
                 <Icon className="h-5 w-5" />
               </div>
               <CardHeader>
@@ -118,7 +125,10 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
         </Card>
 
         <Card className="relative overflow-hidden">
-          <div className="absolute right-[-10%] top-[-10%] h-36 w-36 rounded-full bg-indigo-500/15 blur-3xl" />
+          <div
+            className="absolute right-[-10%] top-[-10%] h-36 w-36 rounded-full blur-3xl"
+            style={{ background: "color-mix(in srgb, var(--accent) 15%, transparent)" }}
+          />
           <CardHeader>
             <CardTitle>Recent activity</CardTitle>
             <CardDescription>Latest mutations affecting the selected company.</CardDescription>
@@ -175,7 +185,7 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
               <CardTitle>Project surfaces</CardTitle>
               <CardDescription>Recently updated workspaces linked to the selected company.</CardDescription>
             </div>
-            <ArrowUpRight className="h-5 w-5 text-indigo-200" />
+            <ArrowUpRight className="h-5 w-5" style={{ color: "var(--icon-text)" }} />
           </CardHeader>
           <CardContent className="space-y-3">
             {data.projects.slice(0, 5).map((project) => (
@@ -197,7 +207,15 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
         </Card>
       </section>
 
-      <section className="rounded-[2rem] border bg-[var(--accent-very-soft)] p-5" style={{ borderColor: "var(--accent)" }}>
+      <section
+        className="rounded-[2rem] border p-5"
+        style={{
+          borderColor: "color-mix(in srgb, var(--accent) 52%, var(--border-strong) 48%)",
+          background:
+            "linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent) 0%, var(--card-strong-bg) 72%)",
+          boxShadow: "0 24px 48px -32px color-mix(in srgb, var(--accent) 35%, transparent)"
+        }}
+      >
         <p className="text-xs uppercase tracking-[0.32em]" style={{ color: "var(--icon-text)" }}>Company snapshot</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
@@ -217,7 +235,9 @@ function EmptyState({ message }: { message: string }) {
   return (
     <Card className="min-h-[260px]">
       <CardContent className="flex min-h-[260px] items-center justify-center">
-        <p className="text-sm text-slate-400">{message}</p>
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {message}
+        </p>
       </CardContent>
     </Card>
   );

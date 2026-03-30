@@ -48,11 +48,24 @@ export function ProjectsPage({ companyId }: SharedPageProps) {
 
           return (
             <Card key={project.id} className="relative overflow-hidden">
-              <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/40 to-transparent" />
+              <div
+                className="absolute inset-x-6 top-0 h-px"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent) 40%, transparent) 50%, transparent 100%)"
+                }}
+              />
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-3 text-indigo-200">
+                    <div
+                      className="rounded-2xl border p-3"
+                      style={{
+                        borderColor: "var(--border-weak)",
+                        background: "var(--icon-bg)",
+                        color: "var(--icon-text)"
+                      }}
+                    >
                       <FolderGit2 className="h-5 w-5" />
                     </div>
                     <div>
@@ -71,12 +84,19 @@ export function ProjectsPage({ companyId }: SharedPageProps) {
                   <InfoTile icon={HardDriveDownload} label="Done" value={String(doneCount)} />
                 </div>
 
-                <div className="rounded-2xl border border-white/8 bg-slate-950/55 p-4">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Workspace path</p>
-                  <p className="mt-3 break-all text-sm text-slate-200">{project.workspacePath ?? "Not configured"}</p>
+                <div
+                  className="rounded-2xl border p-4"
+                  style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}
+                >
+                  <p className="text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>
+                    Workspace path
+                  </p>
+                  <p className="mt-3 break-all text-sm" style={{ color: "var(--text-primary)" }}>
+                    {project.workspacePath ?? "Not configured"}
+                  </p>
                 </div>
 
-                <div className="flex items-center justify-between text-sm text-slate-400">
+                <div className="flex items-center justify-between text-sm" style={{ color: "var(--text-secondary)" }}>
                   <span>Updated</span>
                   <span>{formatDate(project.updatedAt)}</span>
                 </div>
@@ -101,12 +121,17 @@ function InfoTile({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-slate-500">
+    <div
+      className="rounded-2xl border p-3"
+      style={{ borderColor: "var(--border-weak)", background: "var(--surface-soft)" }}
+    >
+      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>
         <Icon className="h-4 w-4" />
         {label}
       </div>
-      <p className="mt-3 text-lg font-semibold text-white">{value}</p>
+      <p className="mt-3 text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
+        {value}
+      </p>
     </div>
   );
 }
@@ -115,7 +140,9 @@ function ProjectsState({ message }: { message: string }) {
   return (
     <Card>
       <CardContent className="flex min-h-[220px] items-center justify-center">
-        <p className="text-sm text-slate-400">{message}</p>
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {message}
+        </p>
       </CardContent>
     </Card>
   );

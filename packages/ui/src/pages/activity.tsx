@@ -50,20 +50,40 @@ export function ActivityPage({ companyId }: SharedPageProps) {
               return (
                 <div key={entry.id} className="relative flex gap-4">
                   {index < data.activity.length - 1 ? (
-                    <div className="absolute left-[19px] top-10 h-[calc(100%+1.5rem)] w-px bg-gradient-to-b from-indigo-400/35 to-transparent" />
+                    <div
+                      className="absolute left-[19px] top-10 h-[calc(100%+1.5rem)] w-px"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, color-mix(in srgb, var(--accent) 35%, transparent) 0%, transparent 100%)"
+                      }}
+                    />
                   ) : null}
-                  <div className="relative mt-1 rounded-full border border-indigo-400/30 bg-indigo-500/10 p-2 text-indigo-200">
+                  <div
+                    className="relative mt-1 rounded-full border p-2"
+                    style={{
+                      borderColor: "var(--border-weak)",
+                      background: "var(--icon-bg)",
+                      color: "var(--icon-text)"
+                    }}
+                  >
                     <Icon className="h-4 w-4" />
                   </div>
-                  <div className="min-w-0 flex-1 rounded-3xl border border-white/8 bg-slate-950/55 p-5">
+                  <div
+                    className="min-w-0 flex-1 rounded-3xl border p-5"
+                    style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}
+                  >
                     <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                       <div>
-                        <p className="text-base font-medium text-white">{humanize(entry.action)}</p>
-                        <p className="mt-2 text-sm text-slate-400">{formatDetails(entry.details)}</p>
+                        <p className="text-base font-medium" style={{ color: "var(--text-primary)" }}>
+                          {humanize(entry.action)}
+                        </p>
+                        <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+                          {formatDetails(entry.details)}
+                        </p>
                       </div>
-                      <div className="text-sm text-slate-400 md:text-right">
+                      <div className="text-sm md:text-right" style={{ color: "var(--text-secondary)" }}>
                         <p>{formatDate(entry.createdAt)}</p>
-                        <p className="mt-1 text-slate-500">
+                        <p className="mt-1" style={{ color: "var(--text-tertiary)" }}>
                           {entry.agentId ? `Actor: ${agentLookup.get(entry.agentId) ?? entry.agentId}` : "Actor: System"}
                         </p>
                       </div>
@@ -72,7 +92,11 @@ export function ActivityPage({ companyId }: SharedPageProps) {
                 </div>
               );
             })}
-            {!data.activity.length ? <p className="text-center text-sm text-slate-500">No activity has been logged yet.</p> : null}
+            {!data.activity.length ? (
+              <p className="text-center text-sm" style={{ color: "var(--text-tertiary)" }}>
+                No activity has been logged yet.
+              </p>
+            ) : null}
           </div>
         </CardContent>
       </Card>
@@ -84,7 +108,9 @@ function ActivityState({ message }: { message: string }) {
   return (
     <Card>
       <CardContent className="flex min-h-[220px] items-center justify-center">
-        <p className="text-sm text-slate-400">{message}</p>
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {message}
+        </p>
       </CardContent>
     </Card>
   );

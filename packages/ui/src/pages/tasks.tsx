@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { CSSProperties } from "react";
 import type { Agent, Project, Task, TaskStatus } from "@agentic-board/shared";
 import { ArrowRight, ListTodo, RefreshCcw } from "lucide-react";
 import type { SharedPageProps } from "../App";
@@ -172,21 +173,43 @@ function BoardState({ message }: { message: string }) {
   return (
     <Card>
       <CardContent className="flex min-h-[240px] items-center justify-center">
-        <p className="text-sm text-slate-400">{message}</p>
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {message}
+        </p>
       </CardContent>
     </Card>
   );
 }
 
 function PriorityPill({ priority }: { priority: Task["priority"] }) {
-  const palette: Record<Task["priority"], string> = {
-    critical: "border-rose-400/30 bg-rose-400/12 text-rose-200",
-    high: "border-amber-400/30 bg-amber-400/12 text-amber-200",
-    medium: "border-sky-400/30 bg-sky-400/12 text-sky-200",
-    low: "border-slate-400/20 bg-slate-400/10 text-slate-300"
+  const palette: Record<Task["priority"], CSSProperties> = {
+    critical: {
+      borderColor: "color-mix(in srgb, var(--danger) 28%, transparent)",
+      background: "color-mix(in srgb, var(--danger) 12%, transparent)",
+      color: "color-mix(in srgb, var(--danger) 72%, var(--text-primary) 28%)"
+    },
+    high: {
+      borderColor: "color-mix(in srgb, var(--warning) 32%, transparent)",
+      background: "color-mix(in srgb, var(--warning) 14%, transparent)",
+      color: "color-mix(in srgb, var(--warning) 76%, var(--text-primary) 24%)"
+    },
+    medium: {
+      borderColor: "color-mix(in srgb, var(--accent) 28%, transparent)",
+      background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+      color: "color-mix(in srgb, var(--accent) 78%, var(--text-primary) 22%)"
+    },
+    low: {
+      borderColor: "var(--border-strong)",
+      background: "var(--surface-soft)",
+      color: "var(--text-secondary)"
+    }
   };
 
-  return <span className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize ${palette[priority]}`}>{priority}</span>;
+  return (
+    <span className="rounded-full border px-2.5 py-1 text-xs font-semibold capitalize" style={palette[priority]}>
+      {priority}
+    </span>
+  );
 }
 
 function columnDescription(status: TaskStatus) {
