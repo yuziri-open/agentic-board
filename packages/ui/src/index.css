@@ -116,7 +116,7 @@
 
 @layer components {
   .panel {
-    @apply rounded-2xl border bg-opacity-[0.04] shadow-lg backdrop-blur-xl;
+    @apply rounded-2xl border shadow-lg backdrop-blur-xl;
     border-color: var(--border);
     background: var(--surface);
     transition: border-color 0.2s ease, background 0.2s ease;
