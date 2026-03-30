@@ -5,7 +5,12 @@ function runCodex(context: ExecutionContext): Promise<ExecutionResult> {
   const startedAt = Date.now();
   const config = context.agent.adapterConfig ?? {};
   const model = typeof config.model === "string" ? config.model : "gpt-5.4-codex";
-  const approval = typeof config.approval === "string" ? config.approval : "full-auto";
+  const approval =
+    typeof config.approvalMode === "string"
+      ? config.approvalMode
+      : typeof config.approval === "string"
+        ? config.approval
+        : "full-auto";
   const args = ["exec", context.prompt, "--model", model, "--approval-mode", approval];
 
   if (context.workingDir) {

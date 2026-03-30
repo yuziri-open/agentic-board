@@ -401,6 +401,10 @@ function seedDatabase(): void {
     .run();
 }
 
+function shouldSeedDatabase(): boolean {
+  return process.env.AGENTIC_BOARD_SEED === "demo";
+}
+
 export function initializeDatabase(): void {
   if (initialized) {
     return;
@@ -408,7 +412,9 @@ export function initializeDatabase(): void {
 
   sqlite.pragma("foreign_keys = ON");
   sqlite.exec(schemaSql.join("\n"));
-  seedDatabase();
+  if (shouldSeedDatabase()) {
+    seedDatabase();
+  }
   initialized = true;
 }
 

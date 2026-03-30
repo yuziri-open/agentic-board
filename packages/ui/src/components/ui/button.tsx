@@ -6,11 +6,11 @@ export function cn(...values: Array<string | false | null | undefined>) {
 
 const variants = {
   default:
-    "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-400 focus-visible:outline-indigo-300",
+    "bg-[var(--accent)] text-[var(--text-on-accent)] shadow-lg hover:opacity-90 focus-visible:outline-[var(--accent)]",
   outline:
-    "border border-white/12 bg-white/[0.03] text-slate-100 hover:border-indigo-400/40 hover:bg-indigo-500/10 focus-visible:outline-indigo-300",
+    "border border-[var(--border-weak)] bg-[var(--card-bg)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent-very-soft)] focus-visible:outline-[var(--accent)]",
   ghost:
-    "bg-transparent text-slate-200 hover:bg-white/6 hover:text-white focus-visible:outline-indigo-300"
+    "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--accent-very-soft)] hover:text-[var(--text-primary)] focus-visible:outline-[var(--accent)]"
 } as const;
 
 const sizes = {

@@ -8,6 +8,7 @@ import { ActivityPage } from "./pages/activity";
 import { AgentsPage } from "./pages/agents";
 import { DashboardPage } from "./pages/dashboard";
 import { ProjectsPage } from "./pages/projects";
+import { SetupPage } from "./pages/setup";
 import { TasksPage } from "./pages/tasks";
 
 export function App() {
@@ -46,6 +47,10 @@ export function App() {
   const companies = companiesQuery.data ?? [];
   const selectedCompany = companies.find((company) => company.id === selectedCompanyId);
 
+  if (!companies.length) {
+    return <SetupPage onComplete={setSelectedCompanyId} />;
+  }
+
   return (
     <Layout
       companies={companies}
@@ -70,8 +75,12 @@ function FullscreenMessage({ label }: { label: string }) {
   return (
     <main className="flex min-h-screen items-center justify-center p-6">
       <div className="panel-strong max-w-lg px-8 py-10 text-center">
-        <p className="text-xs uppercase tracking-[0.32em] text-indigo-300">AgenticBoard</p>
-        <h1 className="mt-4 text-2xl font-semibold text-white">Workspace initialization</h1>
+        <p className="text-xs uppercase tracking-[0.32em]" style={{ color: "var(--icon-text)" }}>
+          AgenticBoard
+        </p>
+        <h1 className="mt-4 text-2xl font-semibold" style={{ color: "var(--text-primary)" }}>
+          Workspace initialization
+        </h1>
         <p className="subtle-text mt-3 text-sm">{label}</p>
       </div>
     </main>
@@ -79,6 +88,6 @@ function FullscreenMessage({ label }: { label: string }) {
 }
 
 export type SharedPageProps = {
-  company?: Company;
-  companyId?: string;
+  company?: Company | undefined;
+  companyId?: string | undefined;
 };

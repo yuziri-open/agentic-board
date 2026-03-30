@@ -1,19 +1,19 @@
-import type { HTMLAttributes } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 import { cn } from "./button";
 
-const palettes: Record<string, string> = {
-  active: "border-emerald-400/30 bg-emerald-400/12 text-emerald-200",
-  archived: "border-slate-400/20 bg-slate-400/10 text-slate-300",
-  backlog: "border-slate-400/20 bg-slate-400/10 text-slate-200",
-  todo: "border-sky-400/30 bg-sky-400/12 text-sky-200",
-  in_progress: "border-indigo-400/30 bg-indigo-400/12 text-indigo-200",
-  in_review: "border-amber-400/30 bg-amber-400/12 text-amber-200",
-  done: "border-emerald-400/30 bg-emerald-400/12 text-emerald-200",
-  cancelled: "border-rose-400/30 bg-rose-400/12 text-rose-200",
-  idle: "border-slate-400/20 bg-slate-400/10 text-slate-200",
-  running: "border-emerald-400/30 bg-emerald-400/12 text-emerald-200",
-  paused: "border-amber-400/30 bg-amber-400/12 text-amber-200",
-  error: "border-rose-400/30 bg-rose-400/12 text-rose-200"
+const palettes: Record<string, CSSProperties> = {
+  active: createAccentBadge("var(--success)"),
+  archived: createNeutralBadge(),
+  backlog: createNeutralBadge(),
+  todo: createAccentBadge("#0ea5e9"),
+  in_progress: createAccentBadge("var(--accent)"),
+  in_review: createAccentBadge("var(--warning)"),
+  done: createAccentBadge("var(--success)"),
+  cancelled: createAccentBadge("var(--danger)"),
+  idle: createNeutralBadge(),
+  running: createAccentBadge("var(--success)"),
+  paused: createAccentBadge("var(--warning)"),
+  error: createAccentBadge("var(--danger)")
 };
 
 function humanize(value: string) {
@@ -31,12 +31,34 @@ export function Badge({ children, className, status, ...props }: BadgeProps) {
     <span
       className={cn(
         "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium capitalize tracking-wide",
-        palettes[resolvedStatus] ?? "border-white/10 bg-white/5 text-slate-200",
         className
       )}
+      style={
+        palettes[resolvedStatus] ?? {
+          borderColor: "var(--border-weak)",
+          background: "var(--card-bg)",
+          color: "var(--text-secondary)"
+        }
+      }
       {...props}
     >
       {children ?? humanize(resolvedStatus)}
     </span>
   );
+}
+
+function createAccentBadge(color: string): CSSProperties {
+  return {
+    borderColor: `color-mix(in srgb, ${color} 34%, var(--border-weak))`,
+    background: `color-mix(in srgb, ${color} 14%, transparent)`,
+    color: `color-mix(in srgb, ${color} 72%, var(--text-primary))`
+  };
+}
+
+function createNeutralBadge(): CSSProperties {
+  return {
+    borderColor: "var(--border-weak)",
+    background: "var(--card-bg)",
+    color: "var(--text-secondary)"
+  };
 }

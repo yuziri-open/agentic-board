@@ -26,13 +26,18 @@ const navigation = [
 type LayoutProps = {
   children: ReactNode;
   companies: Company[];
-  selectedCompany?: Company;
-  selectedCompanyId?: string;
+  selectedCompany?: Company | undefined;
+  selectedCompanyId?: string | undefined;
   onCompanyChange: (companyId: string) => void;
   isRefreshing?: boolean;
 };
 
-function ThemeToggle() {
+const optionStyle = {
+  background: "var(--card-strong-bg)",
+  color: "var(--text-primary)"
+} as const;
+
+export function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const saved = localStorage.getItem("agentic-board-theme");
     if (saved === "light" || saved === "dark") return saved;
@@ -82,12 +87,23 @@ export function Layout({
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-400/30 bg-indigo-500/15 text-indigo-200">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-2xl border"
+                style={{
+                  borderColor: "var(--border-weak)",
+                  background: "var(--icon-bg)",
+                  color: "var(--icon-text)"
+                }}
+              >
                 <Sparkles className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.34em] text-indigo-300">AgenticBoard</p>
-                <p className="mt-1 text-lg font-semibold text-white">Mission control</p>
+                <p className="text-xs uppercase tracking-[0.34em]" style={{ color: "var(--icon-text)" }}>
+                  AgenticBoard
+                </p>
+                <p className="mt-1 text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
+                  Mission control
+                </p>
               </div>
             </div>
             <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsMobileNavOpen(false)}>
@@ -106,26 +122,36 @@ export function Layout({
                   onClick={() => setIsMobileNavOpen(false)}
                   className={({ isActive }) =>
                     cn(
-                      "group flex items-center justify-between rounded-2xl px-4 py-3 text-sm transition duration-200",
-                      isActive
-                        ? "bg-indigo-500/14 text-white shadow-[inset_0_0_0_1px_rgba(129,140,248,0.36)]"
-                        : "text-slate-300 hover:bg-white/[0.04] hover:text-white"
+                      "group flex items-center justify-between rounded-2xl px-4 py-3 text-sm transition duration-200 hover:bg-[var(--accent-very-soft)] hover:text-[var(--text-primary)]",
+                      isActive && "shadow-[inset_0_0_0_1px_var(--border-weak)]"
                     )
                   }
+                  style={({ isActive }) => ({
+                    background: isActive ? "var(--accent-soft)" : "transparent",
+                    color: isActive ? "var(--text-primary)" : "var(--text-secondary)"
+                  })}
                 >
                   <span className="flex items-center gap-3">
                     <Icon className="h-4 w-4" />
                     {item.label}
                   </span>
-                  <span className="h-2 w-2 rounded-full bg-indigo-300/0 transition group-[.active]:bg-indigo-300" />
+                  <span
+                    className="h-2 w-2 rounded-full transition"
+                    style={{ background: location.pathname === item.to ? "var(--icon-text)" : "transparent" }}
+                  />
                 </NavLink>
               );
             })}
           </nav>
 
-          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">About</p>
-            <p className="mt-3 text-sm font-medium text-slate-100">
+          <div
+            className="mt-10 rounded-2xl border p-4"
+            style={{ borderColor: "var(--border-weak)", background: "var(--card-bg)" }}
+          >
+            <p className="text-xs uppercase tracking-[0.28em]" style={{ color: "var(--text-tertiary)" }}>
+              About
+            </p>
+            <p className="mt-3 text-sm font-medium" style={{ color: "var(--text-primary)" }}>
               Open-source AI agent orchestration platform. Manage autonomous agents, tasks, and projects.
             </p>
           </div>
@@ -134,7 +160,8 @@ export function Layout({
         {isMobileNavOpen ? (
           <button
             aria-label="Close navigation"
-            className="fixed inset-0 z-30 bg-slate-950/70 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 backdrop-blur-sm lg:hidden"
+            style={{ background: "var(--card-strong-bg)" }}
             onClick={() => setIsMobileNavOpen(false)}
           />
         ) : null}
@@ -153,8 +180,10 @@ export function Layout({
                   <Menu className="h-5 w-5" />
                 </Button>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.32em] text-indigo-300">{currentSection}</p>
-                  <h1 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
+                  <p className="text-xs uppercase tracking-[0.32em]" style={{ color: "var(--icon-text)" }}>
+                    {currentSection}
+                  </p>
+                  <h1 className="mt-2 text-2xl font-semibold sm:text-3xl" style={{ color: "var(--text-primary)" }}>
                     {selectedCompany?.name ?? "Select a company"}
                   </h1>
                   <p className="subtle-text mt-2 max-w-2xl text-sm">
@@ -166,16 +195,27 @@ export function Layout({
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <label className="flex min-w-[220px] flex-col gap-2">
-                  <span className="text-xs uppercase tracking-[0.24em] text-slate-500">Company context</span>
+                  <span className="text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>
+                    Company context
+                  </span>
                   <select
-                    className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-indigo-400/40"
+                    className="rounded-2xl border px-4 py-3 text-sm outline-none transition focus:border-indigo-400/40"
+                    style={{
+                      borderColor: "var(--border-weak)",
+                      background: "var(--card-strong-bg)",
+                      color: "var(--text-primary)"
+                    }}
                     value={selectedCompanyId ?? ""}
                     onChange={(event) => onCompanyChange(event.target.value)}
                     disabled={!companies.length}
                   >
-                    {companies.length ? null : <option value="">No companies available</option>}
+                    {companies.length ? null : (
+                      <option value="" style={optionStyle}>
+                        No companies available
+                      </option>
+                    )}
                     {companies.map((company) => (
-                      <option key={company.id} value={company.id}>
+                      <option key={company.id} value={company.id} style={optionStyle}>
                         {company.name}
                       </option>
                     ))}

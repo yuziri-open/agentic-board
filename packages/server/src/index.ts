@@ -6,6 +6,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { initializeDatabase } from "./db/index.js";
 import { activityRoutes } from "./routes/activity.js";
+import { adaptersRoutes } from "./routes/adapters.js";
 import { agentsRoutes } from "./routes/agents.js";
 import { companiesRoutes } from "./routes/companies.js";
 import { dashboardRoutes } from "./routes/dashboard.js";
@@ -53,6 +54,7 @@ export function createApp(): Hono {
   app.use("/api/*", cors());
 
   app.get("/api/health", (c) => c.json({ ok: true }));
+  app.route("/api", adaptersRoutes);
   app.route("/api", companiesRoutes);
   app.route("/api", agentsRoutes);
   app.route("/api", tasksRoutes);

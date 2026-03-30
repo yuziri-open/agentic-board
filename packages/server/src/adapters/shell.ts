@@ -5,7 +5,7 @@ function runShell(context: ExecutionContext): Promise<ExecutionResult> {
   const startedAt = Date.now();
   const config = context.agent.adapterConfig ?? {};
   const command = typeof config.command === "string" ? config.command : context.prompt;
-  const shell = typeof config.shell === "string" ? config.shell : true;
+  const shell = typeof config.shell === "string" ? (config.shell === "true" ? true : config.shell) : true;
 
   return new Promise((resolve, reject) => {
     const child = spawn(command, {

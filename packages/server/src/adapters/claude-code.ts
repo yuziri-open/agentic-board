@@ -5,7 +5,14 @@ function runClaude(context: ExecutionContext): Promise<ExecutionResult> {
   const startedAt = Date.now();
   const config = context.agent.adapterConfig ?? {};
   const model = typeof config.model === "string" ? config.model : "claude-sonnet-4-20250514";
-  const args = ["-p", "--output-format", "json", "--model", model, context.prompt];
+  const permissionMode = typeof config.permissionMode === "string" ? config.permissionMode : undefined;
+  const args = ["-p", "--output-format", "json", "--model", model];
+
+  if (permissionMode && permissionMode !== "default") {
+    args.push("--permission-mode", permissionMode);
+  }
+
+  args.push(context.prompt);
 
   return new Promise((resolve, reject) => {
     const child = spawn("claude", args, {
@@ -49,15 +56,16 @@ function runClaude(context: ExecutionContext): Promise<ExecutionResult> {
           return null;
         }
       })();
+      const tokensUsed = parsed?.usage
+        ? (parsed.usage.input_tokens ?? 0) + (parsed.usage.output_tokens ?? 0)
+        : undefined;
 
       resolve({
         status: code === 0 ? "success" : "error",
         stdout: parsed?.content ?? stdout,
         stderr,
-        tokensUsed: parsed?.usage
-          ? (parsed.usage.input_tokens ?? 0) + (parsed.usage.output_tokens ?? 0)
-          : undefined,
-        durationMs
+        durationMs,
+        ...(tokensUsed === undefined ? {} : { tokensUsed })
       });
     });
   });
