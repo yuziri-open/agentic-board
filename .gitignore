@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+packages/ui/.vite/

@@ -1,0 +1,33 @@
+{
+  "name": "agentic-board",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AgenticBoard MVP monorepo",
+  "bin": {
+    "agentic-board": "./bin/cli.js"
+  },
+  "workspaces": [
+    "packages/server",
+    "packages/ui",
+    "packages/shared"
+  ],
+  "scripts": {
+    "build": "npm run build -w @agentic-board/shared && npm run build -w @agentic-board/ui && npm run build -w @agentic-board/server",
+    "typecheck": "npm run typecheck:cli && npm run typecheck -w @agentic-board/shared && npm run typecheck -w @agentic-board/ui && npm run typecheck -w @agentic-board/server",
+    "typecheck:cli": "tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --esModuleInterop true --skipLibCheck true bin/cli.ts",
+    "start": "node ./bin/cli.js",
+    "dev:server": "tsx ./packages/server/src/index.ts",
+    "dev:ui": "npm run dev -w @agentic-board/ui"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
