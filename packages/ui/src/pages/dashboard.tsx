@@ -94,21 +94,21 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
               {kanbanStatuses.map((status) => {
                 const tasks = data.tasksByStatus[status];
                 return (
-                  <div key={status} className="rounded-3xl border border-white/8 bg-slate-950/50 p-4">
+                  <div key={status} className="rounded-3xl border bg-[var(--card-bg)] p-4" style={{ borderColor: "var(--border-weak)" }}>
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium capitalize text-white">{status.replaceAll("_", " ")}</p>
+                      <p className="text-sm font-medium capitalize" style={{ color: "var(--text-primary)" }}>{status.replaceAll("_", " ")}</p>
                       <Badge status={status}>{tasks.length}</Badge>
                     </div>
                     <div className="mt-4 space-y-3">
                       {tasks.slice(0, 3).map((task) => (
-                        <div key={task.id} className="rounded-2xl border border-white/6 bg-white/[0.03] p-3">
-                          <p className="text-sm font-medium text-slate-100">{task.title}</p>
-                          <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
+                        <div key={task.id} className="rounded-2xl border bg-[var(--card-bg)] p-3" style={{ borderColor: "var(--border-weak)" }}>
+                          <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{task.title}</p>
+                          <p className="mt-2 text-xs uppercase tracking-[0.2em]" style={{ color: "var(--text-tertiary)" }}>
                             {task.identifier ?? "Unnumbered"}
                           </p>
                         </div>
                       ))}
-                      {!tasks.length ? <p className="text-sm text-slate-500">No tasks in this lane.</p> : null}
+                      {!tasks.length ? <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>No tasks in this lane.</p> : null}
                     </div>
                   </div>
                 );
@@ -125,18 +125,18 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {data.recentActivity.slice(0, 7).map((entry) => (
-              <div key={entry.id} className="flex gap-3 rounded-2xl border border-white/8 bg-slate-950/55 p-4">
-                <div className="mt-1 rounded-full border border-indigo-400/30 bg-indigo-500/10 p-2 text-indigo-200">
+              <div key={entry.id} className="flex gap-3 rounded-2xl border bg-[var(--card-bg)] p-4" style={{ borderColor: "var(--border-weak)" }}>
+                <div className="mt-1 rounded-full border p-2" style={{ background: "var(--icon-bg)", borderColor: "var(--accent)", color: "var(--icon-text)" }}>
                   <TimerReset className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-100">{humanize(entry.action)}</p>
-                  <p className="mt-1 text-sm text-slate-400">{formatDetails(entry.details)}</p>
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">{formatDate(entry.createdAt)}</p>
+                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{humanize(entry.action)}</p>
+                  <p className="mt-1 text-sm" style={{ color: "var(--text-secondary)" }}>{formatDetails(entry.details)}</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.2em]" style={{ color: "var(--text-tertiary)" }}>{formatDate(entry.createdAt)}</p>
                 </div>
               </div>
             ))}
-            {!data.recentActivity.length ? <p className="text-sm text-slate-500">No recent activity recorded.</p> : null}
+            {!data.recentActivity.length ? <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>No recent activity recorded.</p> : null}
           </CardContent>
         </Card>
       </section>
@@ -152,20 +152,20 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
           </CardHeader>
           <CardContent className="space-y-3">
             {data.agents.slice(0, 5).map((agent) => (
-              <div key={agent.id} className="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+              <div key={agent.id} className="flex items-center justify-between rounded-2xl border bg-[var(--card-bg)] p-4" style={{ borderColor: "var(--border-weak)" }}>
                 <div>
-                  <p className="font-medium text-white">{agent.name}</p>
-                  <p className="mt-1 text-sm text-slate-400">{agent.title ?? humanize(agent.role)}</p>
+                  <p className="font-medium" style={{ color: "var(--text-primary)" }}>{agent.name}</p>
+                  <p className="mt-1 text-sm" style={{ color: "var(--text-secondary)" }}>{agent.title ?? humanize(agent.role)}</p>
                 </div>
                 <div className="text-right">
                   <Badge status={agent.status} />
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
+                  <p className="mt-2 text-xs uppercase tracking-[0.2em]" style={{ color: "var(--text-tertiary)" }}>
                     {agent.adapterType.replaceAll("_", " ")}
                   </p>
                 </div>
               </div>
             ))}
-            {!data.agents.length ? <p className="text-sm text-slate-500">No agents available.</p> : null}
+            {!data.agents.length ? <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>No agents available.</p> : null}
           </CardContent>
         </Card>
 
@@ -179,34 +179,34 @@ export function DashboardPage({ company, companyId }: SharedPageProps) {
           </CardHeader>
           <CardContent className="space-y-3">
             {data.projects.slice(0, 5).map((project) => (
-              <div key={project.id} className="rounded-2xl border border-white/8 bg-slate-950/55 p-4">
+              <div key={project.id} className="rounded-2xl border bg-[var(--card-bg)] p-4" style={{ borderColor: "var(--border-weak)" }}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-medium text-white">{project.name}</p>
-                    <p className="mt-1 text-sm text-slate-400">{project.description ?? "No description provided."}</p>
+                    <p className="font-medium" style={{ color: "var(--text-primary)" }}>{project.name}</p>
+                    <p className="mt-1 text-sm" style={{ color: "var(--text-secondary)" }}>{project.description ?? "No description provided."}</p>
                   </div>
                   <Badge status={project.status} />
                 </div>
-                <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-500">
+                <p className="mt-3 text-xs uppercase tracking-[0.2em]" style={{ color: "var(--text-tertiary)" }}>
                   {project.workspacePath ?? "Workspace path not set"}
                 </p>
               </div>
             ))}
-            {!data.projects.length ? <p className="text-sm text-slate-500">No projects registered.</p> : null}
+            {!data.projects.length ? <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>No projects registered.</p> : null}
           </CardContent>
         </Card>
       </section>
 
-      <section className="rounded-[2rem] border border-indigo-400/20 bg-indigo-500/8 p-5">
-        <p className="text-xs uppercase tracking-[0.32em] text-indigo-200">Company snapshot</p>
+      <section className="rounded-[2rem] border bg-[var(--accent-very-soft)] p-5" style={{ borderColor: "var(--accent)" }}>
+        <p className="text-xs uppercase tracking-[0.32em]" style={{ color: "var(--icon-text)" }}>Company snapshot</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white">{company?.name ?? data.company.name}</h2>
-            <p className="mt-2 max-w-3xl text-sm text-indigo-100/75">
+            <h2 className="text-xl font-semibold" style={{ color: "var(--text-primary)" }}>{company?.name ?? data.company.name}</h2>
+            <p className="mt-2 max-w-3xl text-sm" style={{ color: "var(--text-secondary)" }}>
               {company?.description ?? data.company.description ?? "No description has been set for this company yet."}
             </p>
           </div>
-          <p className="text-sm text-indigo-100/80">Cancelled tasks tracked separately: {data.tasksByStatus.cancelled.length}</p>
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>Cancelled tasks tracked separately: {data.tasksByStatus.cancelled.length}</p>
         </div>
       </section>
     </div>

@@ -109,38 +109,39 @@ export function TasksPage({ companyId }: SharedPageProps) {
                     updateTaskMutation.isPending && updateTaskMutation.variables?.taskId === task.id;
 
                   return (
-                    <article key={task.id} className="rounded-3xl border border-white/8 bg-slate-950/55 p-4">
+                    <article key={task.id} className="rounded-3xl border bg-[var(--card-bg)] p-4" style={{ borderColor: "var(--border-weak)" }}>
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-sm font-medium text-white">{task.title}</p>
-                          <p className="mt-2 text-xs uppercase tracking-[0.24em] text-slate-500">
+                          <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{task.title}</p>
+                          <p className="mt-2 text-xs uppercase tracking-[0.24em]" style={{ color: "var(--text-tertiary)" }}>
                             {task.identifier ?? "Unnumbered"}
                           </p>
                         </div>
                         <PriorityPill priority={task.priority} />
                       </div>
 
-                      <p className="mt-3 text-sm text-slate-400">
+                      <p className="mt-3 text-sm" style={{ color: "var(--text-secondary)" }}>
                         {task.description ?? "No description added for this task."}
                       </p>
 
-                      <div className="mt-4 grid gap-2 text-xs text-slate-400">
+                      <div className="mt-4 grid gap-2 text-xs" style={{ color: "var(--text-secondary)" }}>
                         <div className="flex items-center justify-between">
                           <span>Project</span>
-                          <span className="text-slate-200">{projectName ?? "Unassigned"}</span>
+                          <span style={{ color: "var(--text-primary)" }}>{projectName ?? "Unassigned"}</span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span>Assignee</span>
-                          <span className="text-slate-200">{assigneeName ?? "Nobody"}</span>
+                          <span style={{ color: "var(--text-primary)" }}>{assigneeName ?? "Nobody"}</span>
                         </div>
                       </div>
 
                       {nextStatus ? (
                         <Button
                           variant="ghost"
-                          className="mt-4 w-full justify-center border border-white/8"
+                          className="mt-4 w-full justify-center border"
                           disabled={isMutating}
                           onClick={() => updateTaskMutation.mutate({ taskId: task.id, status: nextStatus })}
+                          style={{ borderColor: "var(--border-weak)" }}
                         >
                           <ArrowRight className="h-4 w-4" />
                           {isMutating ? "Updating..." : `Move to ${nextStatus.replaceAll("_", " ")}`}
@@ -151,10 +152,10 @@ export function TasksPage({ companyId }: SharedPageProps) {
                 })}
 
                 {!columnTasks.length ? (
-                  <div className="flex flex-1 items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
+                  <div className="flex flex-1 items-center justify-center rounded-3xl border border-dashed bg-[var(--card-bg)] p-6 text-center" style={{ borderColor: "var(--border-weak)" }}>
                     <div>
-                      <ListTodo className="mx-auto h-8 w-8 text-slate-500" />
-                      <p className="mt-3 text-sm text-slate-500">No tasks in this lane.</p>
+                      <ListTodo className="mx-auto h-8 w-8" style={{ color: "var(--text-tertiary)" }} />
+                      <p className="mt-3 text-sm" style={{ color: "var(--text-tertiary)" }}>No tasks in this lane.</p>
                     </div>
                   </div>
                 ) : null}

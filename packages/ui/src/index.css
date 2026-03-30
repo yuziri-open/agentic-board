@@ -1,25 +1,68 @@
 @import "tailwindcss";
 
+/* ===== Theme Variables ===== */
 :root {
-  color-scheme: dark;
+  --color-scheme: light;
+  --background: #f8fafc;
+  --background-elevated: #ffffff;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-strong: rgba(255, 255, 255, 0.98);
+  --surface-soft: rgba(241, 245, 249, 0.6);
+  --border: rgba(203, 213, 225, 0.6);
+  --border-strong: rgba(148, 163, 184, 0.4);
+  --border-weak: rgba(203, 213, 225, 0.4);
+  --foreground: #1e293b;
+  --muted: #64748b;
+  --accent: #6366f1;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --accent-very-soft: rgba(99, 102, 241, 0.08);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Semantic colors */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-on-accent: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-strong-bg: rgba(255, 255, 255, 0.85);
+  --icon-bg: rgba(99, 102, 241, 0.08);
+  --icon-text: #6366f1;
+}
+
+[data-theme="dark"] {
+  --color-scheme: dark;
   --background: #020617;
   --background-elevated: #0f172a;
   --surface: rgba(15, 23, 42, 0.74);
   --surface-strong: rgba(15, 23, 42, 0.92);
   --surface-soft: rgba(30, 41, 59, 0.58);
-  --border: rgba(99, 102, 241, 0.18);
-  --border-strong: rgba(129, 140, 248, 0.42);
+  --border: rgba(148, 163, 184, 0.25);
+  --border-strong: rgba(148, 163, 184, 0.4);
+  --border-weak: rgba(255, 255, 255, 0.08);
   --foreground: #e5e7eb;
   --muted: #94a3b8;
   --accent: #6366f1;
   --accent-soft: rgba(99, 102, 241, 0.14);
+  --accent-very-soft: rgba(99, 102, 241, 0.08);
   --success: #22c55e;
   --warning: #f59e0b;
   --danger: #ef4444;
+
+  /* Semantic colors */
+  --text-primary: #e5e7eb;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-on-accent: #ffffff;
+  --card-bg: rgba(15, 23, 42, 0.55);
+  --card-strong-bg: rgba(15, 23, 42, 0.8);
+  --icon-bg: rgba(99, 102, 241, 0.15);
+  --icon-text: #a5b4fc;
 }
 
 @theme inline {
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @layer base {
@@ -29,6 +72,7 @@
 
   html {
     min-height: 100%;
+    color-scheme: var(--color-scheme);
   }
 
   body {
@@ -36,12 +80,17 @@
     margin: 0;
     color: var(--foreground);
     font-family: var(--font-sans);
+    background: var(--background);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  body[data-theme="dark"] {
     background:
       radial-gradient(circle at top left, rgba(99, 102, 241, 0.22), transparent 30%),
       radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%),
       linear-gradient(180deg, #0b1120 0%, var(--background) 48%, #030712 100%);
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
   }
 
   a {
@@ -67,13 +116,16 @@
 
 @layer components {
   .panel {
-    @apply rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_28px_80px_-32px_rgba(15,23,42,0.95)] backdrop-blur-xl;
+    @apply rounded-2xl border bg-opacity-[0.04] shadow-lg backdrop-blur-xl;
     border-color: var(--border);
+    background: var(--surface);
+    transition: border-color 0.2s ease, background 0.2s ease;
   }
 
   .panel-strong {
-    @apply rounded-3xl border bg-slate-950/80 shadow-[0_30px_100px_-42px_rgba(2,6,23,0.95)] backdrop-blur-xl;
+    @apply rounded-2xl border shadow-xl backdrop-blur-xl;
     border-color: var(--border-strong);
+    background: var(--surface-strong);
   }
 
   .subtle-text {
@@ -86,24 +138,50 @@
       linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
     background-size: 28px 28px;
   }
+
+  /* Theme Toggle Button */
+  .theme-toggle {
+    @apply flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200;
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--muted);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
 
-::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
-}
+  ::-webkit-scrollbar-track {
+    background: var(--surface-soft);
+  }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.35);
-  border-radius: 999px;
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+
+  /* Light theme specific adjustments */
+  body[data-theme="light"] .faint-grid {
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  }
 }

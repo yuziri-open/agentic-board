@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import type { Company } from "@agentic-board/shared";
 import {
   Activity,
@@ -7,7 +7,9 @@ import {
   FolderKanban,
   LayoutDashboard,
   Menu,
+  Moon,
   Sparkles,
+  Sun,
   X
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -29,6 +31,29 @@ type LayoutProps = {
   onCompanyChange: (companyId: string) => void;
   isRefreshing?: boolean;
 };
+
+function ThemeToggle() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const saved = localStorage.getItem("agentic-board-theme");
+    if (saved === "light" || saved === "dark") return saved;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("agentic-board-theme", theme);
+  }, [theme]);
+
+  return (
+    <button
+      onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+      className="theme-toggle"
+      aria-label="Toggle theme"
+    >
+      {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+    </button>
+  );
+}
 
 export function Layout({
   children,
@@ -98,12 +123,11 @@ export function Layout({
             })}
           </nav>
 
-          <div className="mt-10 rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Workspace focus</p>
+          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">About</p>
             <p className="mt-3 text-sm font-medium text-slate-100">
-              Keep agents, delivery, and audit trail aligned from one control surface.
+              Open-source AI agent orchestration platform. Manage autonomous agents, tasks, and projects.
             </p>
-            <p className="mt-3 text-sm text-slate-400">The dashboard auto-targets the first company until you switch context.</p>
           </div>
         </div>
 
@@ -135,7 +159,7 @@ export function Layout({
                   </h1>
                   <p className="subtle-text mt-2 max-w-2xl text-sm">
                     {selectedCompany?.description ??
-                      "Monitor autonomous work, task flow, and project health across the selected workspace."}
+                      "Monitor autonomous work, task flow, and project health across selected workspace."}
                   </p>
                 </div>
               </div>
@@ -158,10 +182,7 @@ export function Layout({
                   </select>
                 </label>
 
-                <div className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">State</p>
-                  <p className="mt-2 font-medium text-white">{isRefreshing ? "Refreshing" : "Live from /api"}</p>
-                </div>
+                <ThemeToggle />
               </div>
             </div>
           </header>
