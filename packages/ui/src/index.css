@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #020617;
+  --background-elevated: #0f172a;
+  --surface: rgba(15, 23, 42, 0.74);
+  --surface-strong: rgba(15, 23, 42, 0.92);
+  --surface-soft: rgba(30, 41, 59, 0.58);
+  --border: rgba(99, 102, 241, 0.18);
+  --border-strong: rgba(129, 140, 248, 0.42);
+  --foreground: #e5e7eb;
+  --muted: #94a3b8;
+  --accent: #6366f1;
+  --accent-soft: rgba(99, 102, 241, 0.14);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+@theme inline {
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    background:
+      radial-gradient(circle at top left, rgba(99, 102, 241, 0.22), transparent 30%),
+      radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%),
+      linear-gradient(180deg, #0b1120 0%, var(--background) 48%, #030712 100%);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    color: white;
+    background: rgba(99, 102, 241, 0.4);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_28px_80px_-32px_rgba(15,23,42,0.95)] backdrop-blur-xl;
+    border-color: var(--border);
+  }
+
+  .panel-strong {
+    @apply rounded-3xl border bg-slate-950/80 shadow-[0_30px_100px_-42px_rgba(2,6,23,0.95)] backdrop-blur-xl;
+    border-color: var(--border-strong);
+  }
+
+  .subtle-text {
+    color: var(--muted);
+  }
+
+  .faint-grid {
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.35);
+  border-radius: 999px;
+}
