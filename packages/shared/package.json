@@ -1,5 +1,5 @@
 {
-  "name": "@agentic-board/shared",
+  "name": "@kaisha/shared",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/types.js",

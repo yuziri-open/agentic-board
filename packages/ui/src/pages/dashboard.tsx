@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Agent } from "@agentic-board/shared";
+import type { Agent } from "@kaisha/shared";
 import { ArrowUpRight, Bot, BriefcaseBusiness, CalendarDays, CircleCheckBig, FolderKanban, TimerReset } from "lucide-react";
 import type { SharedPageProps } from "../App";
 import { Badge } from "../components/ui/badge";

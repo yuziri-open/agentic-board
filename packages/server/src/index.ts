@@ -70,8 +70,8 @@ export function createApp(): Hono {
     if (!existsSync(uiDist)) {
       return c.html(
         `<!doctype html><html><body style="font-family:sans-serif;background:#0b1220;color:#fff;padding:24px">
-          <h1>AgenticBoard</h1>
-          <p>UI build not found. Run <code>npm run build -w @agentic-board/ui</code> and reload.</p>
+          <h1>KAISHA</h1>
+          <p>UI build not found. Run <code>npm run build -w @kaisha/ui</code> and reload.</p>
         </body></html>`
       );
     }
@@ -101,5 +101,5 @@ const isMain =
 if (isMain || process.argv[1]?.endsWith("index.ts")) {
   const port = Number(process.env.PORT ?? "4000");
   startServer(port);
-  console.log(`AgenticBoard server listening on http://localhost:${port}`);
+  console.log(`KAISHA server listening on http://localhost:${port}`);
 }

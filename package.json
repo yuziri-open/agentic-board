@@ -1,11 +1,11 @@
 {
-  "name": "agentic-board",
+  "name": "kaisha",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "AgenticBoard MVP monorepo",
+  "description": "KAISHA — AIエージェントで会社を動かすプラットフォーム",
   "bin": {
-    "agentic-board": "./bin/cli.js"
+    "kaisha": "./bin/cli.js"
   },
   "workspaces": [
     "packages/server",
@@ -13,12 +13,12 @@
     "packages/shared"
   ],
   "scripts": {
-    "build": "npm run build -w @agentic-board/shared && npm run build -w @agentic-board/ui && npm run build -w @agentic-board/server",
-    "typecheck": "npm run typecheck:cli && npm run typecheck -w @agentic-board/shared && npm run typecheck -w @agentic-board/ui && npm run typecheck -w @agentic-board/server",
+    "build": "npm run build -w @kaisha/shared && npm run build -w @kaisha/ui && npm run build -w @kaisha/server",
+    "typecheck": "npm run typecheck:cli && npm run typecheck -w @kaisha/shared && npm run typecheck -w @kaisha/ui && npm run typecheck -w @kaisha/server",
     "typecheck:cli": "tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --esModuleInterop true --skipLibCheck true bin/cli.ts",
     "start": "node ./bin/cli.js",
     "dev:server": "tsx ./packages/server/src/index.ts",
-    "dev:ui": "npm run dev -w @agentic-board/ui"
+    "dev:ui": "npm run dev -w @kaisha/ui"
   },
   "dependencies": {
     "commander": "^12.1.0",

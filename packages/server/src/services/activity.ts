@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm";
-import type { Activity } from "@agentic-board/shared";
+import type { Activity } from "@kaisha/shared";
 import { db, generateId, nowIso, toActivity } from "../db/index.js";
 import { activities } from "../db/schema.js";
 

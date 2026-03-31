@@ -1,4 +1,4 @@
-import type { CalendarEvent, GasSettings, GasSyncResult } from "@agentic-board/shared";
+import type { CalendarEvent, GasSettings, GasSyncResult } from "@kaisha/shared";
 import { Hono } from "hono";
 import { getSetting, nowIso, setSetting } from "../db/index.js";
 import { fetchCalendar, fetchTasks, listFiles, type GasConfig } from "../services/gas.js";

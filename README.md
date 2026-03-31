@@ -1,8 +1,8 @@
-# AgenticBoard
+# KAISHA（会社）
 
-AgenticBoard is a monorepo for running a local multi-agent operations board. The server API is already implemented in `packages/server`, and this repository now includes a React UI, a small CLI entrypoint, and CI type checking.
+KAISHA は AIエージェントで会社を動かすプラットフォームです。ローカルで動かすマルチエージェント運用ボード用のモノレポで、`packages/server` の API 実装に加えて、React UI、CLI エントリーポイント、CI の型チェックを含みます。
 
-AgenticBoard はローカルで動かすマルチエージェント運用ボード用のモノレポです。`packages/server` の API 実装に加えて、React UI、CLI エントリーポイント、CI の型チェックを追加しています。
+KAISHA is a platform for running your company with AI agents — a local multi-agent operations board monorepo with a Hono API server, React UI, CLI entrypoint, and CI type checking.
 
 ## Quick Start
 
@@ -138,5 +138,5 @@ npm start -- --port 4000
 ## Notes
 
 - UI API access is implemented in `packages/ui/src/lib/api.ts` and always uses the `/api` prefix.
-- The server can also serve the built UI from `packages/ui/dist` after `npm run build -w @agentic-board/ui`.
+- The server can also serve the built UI from `packages/ui/dist` after `npm run build -w @kaisha/ui`.
 - CI currently focuses on type safety. Add test jobs later if runtime regression coverage is needed.

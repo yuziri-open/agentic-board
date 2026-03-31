@@ -16,8 +16,8 @@
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
-      "@agentic-board/shared": ["./packages/shared/src/types.ts"],
-      "@agentic-board/shared/*": ["./packages/shared/src/*"]
+      "@kaisha/shared": ["./packages/shared/src/types.ts"],
+      "@kaisha/shared/*": ["./packages/shared/src/*"]
     }
   }
 }

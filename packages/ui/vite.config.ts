@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@agentic-board/shared": fileURLToPath(new URL("../shared/src/types.ts", import.meta.url))
+      "@kaisha/shared": fileURLToPath(new URL("../shared/src/types.ts", import.meta.url))
     }
   },
   server: {

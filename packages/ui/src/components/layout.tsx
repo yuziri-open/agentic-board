@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useMemo, useState } from "react";
-import type { Company } from "@agentic-board/shared";
+import type { Company } from "@kaisha/shared";
 import {
   Activity,
   Bot,
@@ -41,14 +41,14 @@ const optionStyle = {
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
-    const saved = localStorage.getItem("agentic-board-theme");
+    const saved = localStorage.getItem("kaisha-theme");
     if (saved === "light" || saved === "dark") return saved;
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   });
 
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
-    localStorage.setItem("agentic-board-theme", theme);
+    localStorage.setItem("kaisha-theme", theme);
   }, [theme]);
 
   return (
@@ -101,7 +101,7 @@ export function Layout({
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.34em]" style={{ color: "var(--icon-text)" }}>
-                  AgenticBoard
+                  KAISHA
                 </p>
                 <p className="mt-1 text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
                   ミッションコントロール

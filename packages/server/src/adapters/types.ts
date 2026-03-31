@@ -1,4 +1,4 @@
-import type { AdapterType, Agent, Task } from "@agentic-board/shared";
+import type { AdapterType, Agent, Task } from "@kaisha/shared";
 
 export interface ExecutionContext {
   agent: Agent;

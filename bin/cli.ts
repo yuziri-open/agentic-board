@@ -15,8 +15,8 @@ function parsePort(value: string) {
 
 const program = new Command();
 program
-  .name("agentic-board")
-  .description("Start the AgenticBoard server and serve the UI build when present.")
+  .name("kaisha")
+  .description("Start the KAISHA server and serve the UI build when present.")
   .option("-p, --port <port>", "Port to bind the API/UI server to.", parsePort, 4000)
   .parse();
 

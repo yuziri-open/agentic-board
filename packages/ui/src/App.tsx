@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { Company } from "@agentic-board/shared";
+import type { Company } from "@kaisha/shared";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { api } from "./lib/api";
@@ -78,7 +78,7 @@ function FullscreenMessage({ label }: { label: string }) {
     <main className="flex min-h-screen items-center justify-center p-6">
       <div className="panel-strong max-w-lg px-8 py-10 text-center">
         <p className="text-xs uppercase tracking-[0.32em]" style={{ color: "var(--icon-text)" }}>
-          AgenticBoard
+          KAISHA
         </p>
         <h1 className="mt-4 text-2xl font-semibold" style={{ color: "var(--text-primary)" }}>
           ??????????

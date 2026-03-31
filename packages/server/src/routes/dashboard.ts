@@ -1,4 +1,4 @@
-import type { DashboardResponse, TaskStatus } from "@agentic-board/shared";
+import type { DashboardResponse, TaskStatus } from "@kaisha/shared";
 import { Hono } from "hono";
 import { getCompanyById, listCompanyChildren } from "../db/index.js";
 import { getDashboardCalendar } from "./settings.js";

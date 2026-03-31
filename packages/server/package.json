@@ -1,5 +1,5 @@
 {
-  "name": "@agentic-board/server",
+  "name": "@kaisha/server",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,7 +11,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@agentic-board/shared": "file:../shared",
+    "@kaisha/shared": "file:../shared",
     "@hono/node-server": "^1.13.8",
     "better-sqlite3": "^11.7.0",
     "commander": "^12.1.0",

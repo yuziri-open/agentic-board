@@ -1,4 +1,4 @@
-import type { CalendarEvent, GasFile, GasTask } from "@agentic-board/shared";
+import type { CalendarEvent, GasFile, GasTask } from "@kaisha/shared";
 
 export interface GasConfig {
   endpoint: string;

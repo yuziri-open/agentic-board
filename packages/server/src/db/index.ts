@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { nanoid } from "nanoid";
-import type { Activity, Agent, Company, Project, Run, Task } from "@agentic-board/shared";
+import type { Activity, Agent, Company, Project, Run, Task } from "@kaisha/shared";
 import { activities, agents, companies, projects, runs, schemaSql, settings, tasks } from "./schema.js";
 
 const databasePath = process.env.AGENTIC_BOARD_DB_PATH ?? "agentic-board.sqlite";
@@ -250,7 +250,7 @@ function seedDatabase(): void {
         title: "Content Operator",
         capabilities: JSON.stringify(["drafting", "research", "publishing"]),
         adapterType: "shell",
-        adapterConfig: JSON.stringify({ command: "echo AgenticBoard worker ready", shell: "powershell" }),
+        adapterConfig: JSON.stringify({ command: "echo KAISHA worker ready", shell: "powershell" }),
         reportsTo: managerId,
         status: "idle",
         budgetMonthlyCents: 120000,

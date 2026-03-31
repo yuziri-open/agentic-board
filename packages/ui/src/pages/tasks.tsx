@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { CSSProperties } from "react";
-import type { Agent, Project, Task, TaskStatus } from "@agentic-board/shared";
+import type { Agent, Project, Task, TaskStatus } from "@kaisha/shared";
 import { ArrowRight, ListTodo, RefreshCcw } from "lucide-react";
 import type { SharedPageProps } from "../App";
 import { Badge } from "../components/ui/badge";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { GasSettings } from "@agentic-board/shared";
+import type { GasSettings } from "@kaisha/shared";
 import { CheckCircle2, RefreshCcw, Wifi } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";

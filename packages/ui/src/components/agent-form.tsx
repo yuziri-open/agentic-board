@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import type { AgentRole, AdapterType } from "@agentic-board/shared";
+import type { AgentRole, AdapterType } from "@kaisha/shared";
 
 export type SupportedAdapterType = Extract<AdapterType, "claude_code" | "codex" | "shell">;
 export type ClaudePermissionMode = "default" | "acceptEdits" | "bypassPermissions";
@@ -85,7 +85,7 @@ export function createDefaultAgentDraft(): AgentDraft {
     claudePermissionMode: "default",
     codexModel: "gpt-5.4-codex",
     codexApprovalMode: "full-auto",
-    shellCommand: "echo AgenticBoard shell adapter ready",
+    shellCommand: "echo KAISHA shell adapter ready",
     shellMode: "powershell"
   };
 }

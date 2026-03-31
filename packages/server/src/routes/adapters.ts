@@ -1,4 +1,4 @@
-import type { AdapterType } from "@agentic-board/shared";
+import type { AdapterType } from "@kaisha/shared";
 import { Hono } from "hono";
 import { claudeCodeAdapter } from "../adapters/claude-code.js";
 import { codexAdapter } from "../adapters/codex.js";

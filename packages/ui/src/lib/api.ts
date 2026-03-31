@@ -11,7 +11,7 @@ import type {
   Project,
   Task,
   TaskStatus
-} from "@agentic-board/shared";
+} from "@kaisha/shared";
 
 const BASE_URL = "/api";
 

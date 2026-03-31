@@ -1,4 +1,4 @@
-# 🎯 AgenticBoard — AI Workforce Dashboard
+# 🎯 KAISHA — AI Workforce Dashboard
 
 > AIエージェントチームの管理・可視化・オーケストレーション
 > **誰でも5分で使える、軽量OSSのAIワークフォース管理ツール**
@@ -10,7 +10,7 @@
 ### ポジショニング
 - **Paperclip**: 企業向け・重い・PostgreSQL必須・モノレポ
 - **CrewAI/LangGraph**: フレームワーク（コード書かないと使えない）
-- **AgenticBoard（これ）**: **Web UIファースト・SQLite・npx一発・誰でも使える**
+- **KAISHA（これ）**: **Web UIファースト・SQLite・npx一発・誰でも使える**
 
 ### ターゲット
 1. AI活用個人（伊織さんのような人）
@@ -18,9 +18,9 @@
 3. 開発者が自分のAIエージェントチームを管理したい人
 
 ### 差別化
-| 項目 | Paperclip | AgenticBoard |
+| 項目 | Paperclip | KAISHA |
 |------|-----------|-------------|
-| セットアップ | pnpm + PostgreSQL | `npx agentic-board` |
+| セットアップ | pnpm + PostgreSQL | `npx kaisha` |
 | DB | PostgreSQL (embedded) | **SQLite** (ゼロ設定) |
 | 複雑さ | 企業向け・governance重い | シンプル・個人向け |
 | アダプター | 独自プロトコル | **標準CLI呼び出し** |
@@ -54,7 +54,7 @@
 | Backend | **Hono** (Node.js) | Express.jsより軽量・型安全・Web Standards |
 | Database | **SQLite** (better-sqlite3) + Drizzle ORM | ゼロ設定・1ファイル・高速 |
 | Realtime | Server-Sent Events (SSE) | WebSocketより簡単 |
-| CLI | commander.js | `npx agentic-board` |
+| CLI | commander.js | `npx kaisha` |
 | Build | tsup (server) + Vite (UI) | 高速ビルド |
 
 ### ディレクトリ構成
@@ -360,7 +360,7 @@ interface ExecutionResult {
 ### Dashboard コンポーネント
 ```
 ┌─────────────────────────────────────────────────┐
-│  📊 AgenticBoard — Iori.corp                    │
+│  📊 KAISHA — Iori.corp                          │
 ├──────────┬──────────┬──────────┬───────────────┤
 │ Tasks    │ Agents   │ Cost     │ Today          │
 │ 12 active│ 5 online │ $42.30   │ 3 completed    │
@@ -390,21 +390,21 @@ interface ExecutionResult {
 ### インストール & 起動
 ```bash
 # ワンコマンドで起動
-npx agentic-board
+npx kaisha
 
 # または
-npm install -g agentic-board
-agentic-board
+npm install -g kaisha
+kaisha
 ```
 
 ### CLI コマンド
 ```bash
-agentic-board                    # サーバー起動 (default: localhost:4000)
-agentic-board --port 3100        # ポート指定
-agentic-board init               # 初期設定ウィザード
-agentic-board agents list        # エージェント一覧
-agentic-board tasks list         # タスク一覧
-agentic-board invoke <agentId>   # 手動Heartbeat
+kaisha                    # サーバー起動 (default: localhost:4000)
+kaisha --port 3100        # ポート指定
+kaisha init               # 初期設定ウィザード
+kaisha agents list        # エージェント一覧
+kaisha tasks list         # タスク一覧
+kaisha invoke <agentId>   # 手動Heartbeat
 ```
 
 ---
@@ -419,7 +419,7 @@ agentic-board invoke <agentId>   # 手動Heartbeat
 - [x] Codex adapter
 - [x] Shell adapter
 - [x] React UI（Dashboard + Agents + Tasks）
-- [x] CLI (`npx agentic-board`)
+- [x] CLI (`npx kaisha`)
 - [x] README（日英）
 - [x] GitHub Actions CI
 
@@ -438,12 +438,12 @@ agentic-board invoke <agentId>   # 手動Heartbeat
 
 | 名前 | 意味 | npm |
 |------|------|-----|
-| **agentic-board** | エージェント管理ボード | ✅ 空き |
+| **kaisha** | 会社・AIで会社を動かす | ✅ 決定 |
+| agentic-board | エージェント管理ボード | （旧名） |
 | agentctl | kubectl風 | ❓ |
 | ai-workforce | そのまま | ❓ |
-| agentops-lite | AgentOpsの軽量版 | ❓ |
 
-→ **`agentic-board`** で行きましょう。
+→ **`kaisha`** で行きましょう。
 
 ---
 
